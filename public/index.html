@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#162d5a">
+  <meta name="description" content="CampusTrack student management, semester-specific courses, registration numbers, and academic performance analytics.">
+  <title>CampusTrack | Student Management & Performance System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#overview" aria-label="Student Performance home">
+        <span class="brand-mark">SP</span>
+        <span class="brand-copy"><strong>CampusTrack</strong><small>Student performance</small></span>
+      </a>
+      <div class="side-label">WORKSPACE</div>
+      <nav class="side-nav" aria-label="Main navigation">
+        <button class="nav-item active" data-view="overview"><span class="nav-icon">▦</span> Overview</button>
+        <button class="nav-item" data-view="students"><span class="nav-icon">♙</span> Students</button>
+        <button class="nav-item" data-view="courses"><span class="nav-icon">▤</span> Courses</button>
+        <button class="nav-item" data-view="performance"><span class="nav-icon">↗</span> Performance analytics</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-note"><span class="note-icon">✦</span><strong>Keep progress visible</strong><p>Track marks and understand course performance in one place.</p></div>
+        <div class="profile-row"><div class="avatar">AD</div><div><strong>Academic Admin</strong><small>Management workspace</small></div><span class="profile-dots">•••</span></div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">☰</button>
+        <div class="breadcrumb"><span>Workspace</span><span class="crumb-slash">/</span><strong id="breadcrumbCurrent">Overview</strong></div>
+        <div class="topbar-actions"><span class="live-indicator"><i></i> Database connected</span><div class="top-avatar">AD</div></div>
+      </header>
+
+      <section class="page view-section active" id="view-overview">
+        <div class="page-heading"><div><div class="eyebrow">ACADEMIC OVERVIEW</div><h1>Student performance</h1><p class="page-subtitle">A clear picture of student records, courses, and academic outcomes.</p></div><button class="button button-primary" data-open-view="students">＋ Add student</button></div>
+        <div class="stat-grid">
+          <article class="stat-card"><div class="stat-top"><span>Total students</span><span class="stat-icon indigo">♙</span></div><div class="stat-value" id="statStudents">—</div><div class="stat-caption">Registered student records</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Active courses</span><span class="stat-icon blue">▤</span></div><div class="stat-value" id="statCourses">—</div><div class="stat-caption">Courses in the catalogue</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Average marks</span><span class="stat-icon green">↗</span></div><div class="stat-value" id="statAverage">—</div><div class="stat-caption">Across recorded marks</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Marks recorded</span><span class="stat-icon amber">✓</span></div><div class="stat-value" id="statRecorded">—</div><div class="stat-caption">Student-course mark entries</div></article>
+        </div>
+        <div class="content-grid">
+          <section class="panel performance-panel"><div class="panel-heading"><div><h2>Course performance</h2><p>Average marks and class size by course</p></div><button class="text-button" data-open-view="performance">View analytics ↗</button></div><div id="overviewPerformance" class="table-wrap"><div class="loading-state">Loading performance data…</div></div></section>
+          <section class="panel insight-panel"><div class="panel-heading"><div><h2>Performance snapshot</h2><p>Highlights from recorded marks</p></div></div><div id="insightContent" class="insight-content"><div class="loading-state">Calculating insights…</div></div><div class="index-note"><span class="index-icon">⌕</span><div><strong>Query optimization enabled</strong><p>Course code and department/semester indexes are created on startup.</p></div></div></section>
+        </div>
+        <section class="panel recent-panel"><div class="panel-heading"><div><h2>Recent student records</h2><p>Latest students available in the system</p></div><button class="text-button" data-open-view="students">View all students ↗</button></div><div id="overviewStudents" class="table-wrap"><div class="loading-state">Loading student records…</div></div></section>
+      </section>
+
+      <section class="page view-section" id="view-students">
+        <div class="page-heading"><div><div class="eyebrow">PEOPLE & RECORDS</div><h1>Students</h1><p class="page-subtitle">Manage student details and update course marks.</p></div></div>
+        <div class="two-column-layout">
+          <section class="panel form-panel"><div class="panel-heading"><div><h2>Add a student</h2><p>Create a new student record</p></div><span class="small-step">01</span></div>
+            <form id="studentForm" class="form-grid">
+              <label>Full name<input name="name" placeholder="Student full name" required maxlength="120" autocomplete="name"></label>
+              <label>Email address<input name="email" type="email" placeholder="student@college.edu" required maxlength="120" autocomplete="email"></label>
+              <label>Branch / department<select name="department" id="studentDepartment" required><option value="">Loading branches…</option></select></label>
+              <label>Semester<select name="semester" id="studentSemester" required><option value="5">5th Semester</option></select></label>
+              <div class="registration-preview full-width"><span class="preview-kicker">AUTO-ASSIGNED REGISTRATION NUMBER</span><strong id="registrationPreview">AD5-26-XXXXXX</strong><small>Generated securely when the student is saved. Duplicate IDs are rejected by MongoDB.</small></div>
+              <button class="button button-primary full-width" type="submit">＋ Register student</button>
+            </form><div id="studentFormMessage" class="form-message" role="status"></div>
+          </section>
+          <section class="panel form-panel"><div class="panel-heading"><div><h2>Update marks</h2><p>Record or revise marks for a course</p></div><span class="small-step">02</span></div>
+            <form id="marksForm" class="form-grid">
+              <label>Student<select name="studentId" id="marksStudent" required><option value="">Select student</option></select></label>
+              <label>Course<select name="courseCode" id="marksCourse" required><option value="">Select course</option></select></label>
+              <label class="wide-field">Marks <span class="field-hint">out of 100</span><input name="marks" type="number" min="0" max="100" step="0.5" placeholder="e.g. 86" required></label>
+              <button class="button button-primary full-width" type="submit">Save marks</button>
+            </form><div id="marksFormMessage" class="form-message" role="status"></div>
+            <div class="helper-note"><strong>Note</strong><span>Updating marks changes the saved student document and recalculates course analytics automatically.</span></div>
+          </section>
+        </div>
+        <section class="panel table-panel"><div class="panel-heading table-heading"><div><h2>All students</h2><p>Registration numbers are generated from branch and semester</p></div><div class="table-controls"><div class="search-wrap"><span>⌕</span><input id="studentSearch" type="search" placeholder="Search ID, name, or email…"></div><label class="compact-filter">Branch<select id="studentsDepartmentFilter"><option value="">All branches</option></select></label><label class="compact-filter">Semester<select id="studentsSemesterFilter"><option value="">All semesters</option></select></label><span class="count-pill" id="studentResultCount">0 students</span></div></div><div id="studentsTable" class="table-wrap"><div class="loading-state">Loading students…</div></div></section>
+      </section>
+
+      <section class="page view-section" id="view-courses">
+        <div class="page-heading"><div><div class="eyebrow">CURRICULUM</div><h1>Courses</h1><p class="page-subtitle">Maintain the course catalogue used for student marks and analytics.</p></div></div>
+        <section class="panel form-panel course-form-panel"><div class="panel-heading"><div><h2>Add a course</h2><p>The code is generated from the selected branch and semester</p></div><span class="small-step">NEW COURSE</span></div>
+          <form id="courseForm" class="course-form-grid">
+            <label>Course / subject name<input name="courseName" placeholder="Course title" required maxlength="120"></label>
+            <label>Branch / department<select name="department" id="courseDepartment" required><option value="">Loading branches…</option></select></label>
+            <label>Semester<select name="semester" id="courseSemester" required><option value="5">5th Semester</option></select></label>
+            <label>Credits<input name="credits" type="number" min="1" max="10" value="3" required></label>
+            <div class="course-code-preview"><span>Generated course code</span><strong id="courseCodePreview">AD506</strong></div>
+            <button class="button button-primary align-end" type="submit">＋ Add course</button>
+          </form><div id="courseFormMessage" class="form-message" role="status"></div>
+        </section>
+        <section class="panel table-panel"><div class="panel-heading table-heading"><div><h2>Course catalogue</h2><p>Course codes use the branch prefix and semester number, for example AD301 for AI & Data Science semester 3.</p></div><span class="count-pill" id="courseCount">0 courses</span></div><div class="filter-row"><label class="compact-filter">Branch<select id="coursesDepartmentFilter"><option value="">All branches</option></select></label><label class="compact-filter">Semester<select id="coursesSemesterFilter"><option value="">All semesters</option></select></label><button class="button button-secondary button-small" id="resetCourseFilters" type="button">Clear filters</button></div><div id="coursesTable" class="table-wrap"><div class="loading-state">Loading courses…</div></div></section>
+      </section>
+
+      <section class="page view-section" id="view-performance">
+        <div class="page-heading"><div><div class="eyebrow">REPORTS & INSIGHTS</div><h1>Performance analytics</h1><p class="page-subtitle">Course-wise student count and average marks generated through MongoDB aggregation.</p></div><button class="button button-secondary" id="refreshAnalytics">↻ Refresh report</button></div>
+        <div class="analytics-callout"><div class="callout-mark">Σ</div><div><strong>Live aggregation report</strong><p>Student marks are grouped by course, joined with the course catalogue, and summarized with average, highest, and lowest marks.</p></div></div>
+        <section class="panel table-panel"><div class="panel-heading table-heading"><div><h2>Course-wise results</h2><p>Every average is calculated only from students in that course's branch and semester.</p></div><span class="live-tag"><i></i> Live data</span></div><div class="filter-row analytics-filters"><label class="compact-filter">Branch<select id="performanceDepartmentFilter"><option value="">All branches</option></select></label><label class="compact-filter">Semester<select id="performanceSemesterFilter"><option value="">All semesters</option></select></label><button class="button button-secondary button-small" id="clearPerformanceFilters" type="button">Clear filters</button></div><div id="analyticsTable" class="table-wrap"><div class="loading-state">Running aggregation…</div></div></section>
+      </section>
+      <footer class="footer"><span>CampusTrack · Student Management & Performance System</span><span>Powered by MongoDB aggregation</span></footer>
+    </main>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
